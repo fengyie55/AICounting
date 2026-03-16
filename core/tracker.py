@@ -1,6 +1,7 @@
 import numpy as np
 from collections import deque
 import yaml
+import cv2
 
 class ByteTrack:
     def __init__(self, config_path="config/settings.yaml"):
