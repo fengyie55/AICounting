@@ -1,0 +1,91 @@
+# 系统配置文件
+system:
+  version: "1.0.0"
+  language: "zh-CN"
+  theme: "light"
+
+# 检测配置
+detection:
+  model_path: "models/yolov8n.pt"
+  conf_threshold: 0.5
+  iou_threshold: 0.5
+  device: "cpu"  # 可选: cpu, cuda, mps
+  img_size: 640
+
+# 跟踪配置
+tracker:
+  track_thresh: 0.5
+  track_buffer: 30
+  match_thresh: 0.8
+  frame_rate: 30
+  occlusion_threshold: 0.3
+  appearance_threshold: 0.6
+  min_aspect_ratio: 0.2
+  max_aspect_ratio: 5.0
+  min_area: 100
+  max_area: 100000
+
+# 计数配置
+counter:
+  line_position: 0.5  # 计数线位置(0-1, 相对于视频高度)
+  direction: "both"  # 可选: up, down, both
+  debounce_frames: 5  # 防抖帧数
+  duplicate_timeout: 1000  # 重复计数超时(ms)
+
+# 训练配置
+training:
+  epochs: 20
+  batch_size: 2
+  img_size: 640
+  workers: 2
+  auto_annotate: true
+  save_path: "models/custom/"
+
+# 视频配置
+video:
+  source: 0  # 默认摄像头
+  fps: 30
+  width: 1280
+  height: 720
+  save_video: false
+  save_path: "data/videos/"
+
+# 数据配置
+data:
+  save_count: true
+  save_interval: 60  # 数据保存间隔(秒)
+  export_path: "data/exports/"
+  shift_hours: [8, 16, 24]  # 班次时间点
+
+# LED配置
+led:
+  enabled: false
+  port: "COM1"
+  baud_rate: 9600
+  update_interval: 1000  # 更新间隔(ms)
+
+# MES API配置
+mes_api:
+  enabled: true
+  host: "0.0.0.0"
+  port: 8000
+  api_key: "your_api_key_here"
+  push_enabled: false
+  push_url: ""
+  push_interval: 1  # 推送间隔(秒)
+
+# 快捷键配置
+shortcuts:
+  start_count: "Ctrl+S"
+  stop_count: "Ctrl+P"
+  reset_counter: "Ctrl+R"
+  open_settings: "F2"
+  take_snapshot: "F5"
+  export_data: "F10"
+  quick_config: "F12"
+
+# 批次配置
+batch:
+  auto_create: true  # 系统启动时自动创建批次
+  auto_complete: true  # 系统关闭时自动完成批次
+

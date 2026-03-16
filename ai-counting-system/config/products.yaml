@@ -1,0 +1,9 @@
+- create_time: 1773507280298
+  id: prod_1773507280
+  is_active: true
+  model: YOLOv8n
+  model_path: models/yolov8n.pt
+  name: 测试产品-更新
+  remark: 测试
+  specs: {type: test}
+  update_time: 1773507280308
