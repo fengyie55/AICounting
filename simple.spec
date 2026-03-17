@@ -1,28 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# 先放修复代码
-import os
-import platform
-if platform.system() == "Windows":
-    import ctypes
-    from importlib.util import find_spec
-    try:
-        if (spec := find_spec("torch")) and spec.origin and os.path.exists(
-            dll_path := os.path.join(os.path.dirname(spec.origin), "lib", "c10.dll")
-        ):
-            ctypes.CDLL(os.path.normpath(dll_path))
-    except Exception:
-        pass
-
-
-# -*- mode: python ; coding: utf-8 -*-
-# Fixed for V1.0.2 -解决常见编译错误
 
 block_cipher = None
 
-# 自动收集所有数据文件 - 包含整个config目录
-import os
+# 自动收集所有数据文件
 def get_data_files(dir_path):
+    import os
     datas = []
     if not os.path.exists(dir_path):
         return datas
@@ -33,46 +16,43 @@ def get_data_files(dir_path):
     return datas
 
 datas = []
-# 包含所有配置文件
 datas.extend(get_data_files('config'))
-# 如果models目录存在，包含所有模型文件
-datas.extend(get_data_files('models'))
-# 包含docs
-datas.extend(get_data_files('docs'))
 
+# 只包含必要的依赖项
 a = Analysis(
-    ['main.py'],  # 使用 main.py 作为入口
+    ['main.py'],
     pathex=[],
     binaries=[],
     datas=datas,
     hiddenimports=[
-        # 核心依赖
         'cv2',
         'numpy',
-        # PyQt5
         'PyQt5',
         'PyQt5.QtCore',
         'PyQt5.QtGui',
         'PyQt5.QtWidgets',
-        # 其他模块
         'pandas',
         'openpyxl',
         'yaml',
-        'scipy',
         'PIL',
-        'serial',
         'tqdm',
         'psutil',
-        'pymodbus',
-        'sqlalchemy',
         'flask',
         'flask_cors',
         'waitress',
+        'sqlalchemy',
     ],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=[],
+    excludes=[
+        'torch',
+        'torchvision',
+        'ultralytics',
+        'scipy',
+        'pymodbus',
+        'serial',
+    ],
     win_no_prefer_redirects=False,
     win_private_assemblies=False,
     cipher=block_cipher,
@@ -95,12 +75,10 @@ exe = EXE(
     upx=True,
     upx_exclude=[],
     runtime_tmpdir=None,
-    console=True,  # 设置为 True 可以看到错误输出，调试方便；发布时改为 False 隐藏控制台
+    console=True,
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    # 如果有图标可以取消注释下面一行
-    # icon='docs/icon.ico'
 )

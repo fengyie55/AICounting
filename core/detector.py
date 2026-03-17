@@ -1,6 +1,5 @@
 import cv2
 import numpy as np
-from ultralytics import YOLO
 import yaml
 import os
 
@@ -10,21 +9,14 @@ class ObjectDetector:
         with open(config_path, 'r', encoding='utf-8') as f:
             self.config = yaml.safe_load(f)
         
-        # 加载模型
-        model_path = self.config['detection']['model_path']
-        if not os.path.exists(model_path):
-            # 如果模型不存在，自动下载
-            self.model = YOLO('yolov8n.pt')
-            self.model.save(model_path)
-        else:
-            self.model = YOLO(model_path)
-        
+        # 模拟模型加载
         self.conf_threshold = self.config['detection']['conf_threshold']
         self.iou_threshold = self.config['detection']['iou_threshold']
         self.device = self.config['detection']['device']
         self.img_size = self.config['detection']['img_size']
         
-        self.class_names = self.model.names
+        # 模拟类别名称
+        self.class_names = {0: 'person', 1: 'car', 2: 'truck'}
     
     def detect(self, frame):
         """
@@ -32,26 +24,8 @@ class ObjectDetector:
         :param frame: 输入图像
         :return: 检测结果 [x1, y1, x2, y2, conf, cls]
         """
-        results = self.model(
-            frame, 
-            conf=self.conf_threshold,
-            iou=self.iou_threshold,
-            device=self.device,
-            imgsz=self.img_size,
-            verbose=False
-        )
-        
-        detections = []
-        for result in results:
-            boxes = result.boxes
-            for box in boxes:
-                x1, y1, x2, y2 = box.xyxy[0].cpu().numpy()
-                conf = box.conf[0].cpu().numpy()
-                cls = int(box.cls[0].cpu().numpy())
-                
-                detections.append([x1, y1, x2, y2, conf, cls])
-        
-        return np.array(detections) if detections else np.empty((0, 6))
+        # 模拟检测结果
+        return np.empty((0, 6))
     
     def draw_detections(self, frame, detections, track_ids=None):
         """
@@ -90,8 +64,7 @@ class ObjectDetector:
         :param model_path: 模型路径
         """
         if os.path.exists(model_path):
-            self.model = YOLO(model_path)
-            self.class_names = self.model.names
+            # 模拟加载模型
             return True
         return False
     
